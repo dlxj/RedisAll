@@ -1,6 +1,24 @@
 # RedisAll
 
 ```
+# 一定要先调整编码
+dnf install langpacks-en glibc-all-langpacks -y && \
+localectl set-locale LANG=en_US.UTF-8 && \
+localectl
+
+vi /etc/environment
+LANG=en_US.utf-8
+LC_ALL=en_US.utf-8
+	# 添加这两项 
+
+source /etc/environment
+
+vi /etc/profile.d/utf8.sh 
+export LANG="en_US.utf-8"
+export LC_ALL="en_US.utf-8"
+export LANGUAGE="en_US"
+
+
 # almalinux 8
 dnf makecache --refresh && \
 dnf update -y && \
@@ -8,11 +26,27 @@ dnf install -y epel-release && \
 dnf update -y && \
 dnf --enablerepo=powertools install perl-IPC-Run -y && \
 pip3 install conan && \
-dnf install -y tar p7zip libsodium curl net-tools cronie lsof git wget yum-utils make gcc gcc-c++ openssl-devel bzip2-devel libffi-devel zlib-devel libpng-devel boost-devel systemd-devel ntfsprogs ntfs-3g
+dnf install -y tar p7zip libsodium curl net-tools cronie lsof git wget yum-utils make gcc gcc-c++ clang openssl-devel bzip2-devel libffi-devel zlib-devel libpng-devel boost-devel systemd-devel ntfsprogs ntfs-3g
 
 curl https://sh.rustup.rs -sSf | sh && \
 source "$HOME/.cargo/env"
-
+	# RedisJSON 要用 rust 编译
+	
+	
+wget https://github.com/Kitware/CMake/releases/download/v3.23.4/cmake-3.23.4.tar.gz && \
+tar xvf cmake-3.23.4.tar.gz && \
+cd cmake-3.23.4 && \
+mkdir build && \
+cd build && \
+../configure --prefix=/usr/local/cmake/3.23.4 && \
+make -j 4 && \
+make install && \
+ln -s /usr/local/cmake/3.23.4/bin/cmake /usr/bin/cmake && \
+ln -s /usr/local/cmake/3.23.4/bin/cpack /usr/bin/cpack && \
+ln -s /usr/local/cmake/3.23.4/bin/ctest /usr/bin/ctest	
+	# 安装cmake
+	
+	
 git clone --recursive https://github.com/RedisJSON/RedisJSON.git && \
 cd RedisJSON && \
 ./sbin/setup
@@ -24,8 +58,7 @@ export LC_ALL="en_US.utf-8"
 export LANGUAGE="en_US"
 			# 内容一定要先改成这样
 
-curl https://sh.rustup.rs -sSf | sh && \
-source "$HOME/.cargo/env"
+cargo build --release
 
 
 git clone --recursive https://github.com/RediSearch/RediSearch.git && \
@@ -363,4 +396,22 @@ FRISO_API friso_token_t next_mmseg_token(
     /* {{{ task word pool check */
     if ( ! link_list_empty( task->pool ) ) {
 ```
+
+
+
+# building 
+
+```
+git clone --recursive https://github.com/dlxj/RedisAll.git && \
+cd RedisAll && \
+make USE_SYSTEMD=yes BUILD_TLS=yes
+
+
+```
+
+
+
+
+
+
 
