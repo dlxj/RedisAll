@@ -36,9 +36,17 @@ source "$HOME/.cargo/env"
 wget https://github.com/Kitware/CMake/releases/download/v3.23.4/cmake-3.23.4.tar.gz && \
 tar xvf cmake-3.23.4.tar.gz && \
 cd cmake-3.23.4 && \
+./bootstrap --prefix=/usr && \
+make -j 8 && \
+make install && \
+ln -s /usr/local/cmake/3.23.4/bin/cmake /usr/bin/cmake && \
+ln -s /usr/local/cmake/3.23.4/bin/cpack /usr/bin/cpack && \
+ln -s /usr/local/cmake/3.23.4/bin/ctest /usr/bin/ctest	
+
+
 mkdir build && \
 cd build && \
-../configure --prefix=/usr/local/cmake/3.23.4 && \
+../configure --prefix=/usr && \
 make -j 4 && \
 make install && \
 ln -s /usr/local/cmake/3.23.4/bin/cmake /usr/bin/cmake && \
